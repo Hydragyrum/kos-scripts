@@ -1,0 +1,12 @@
+Stage Delta V Remaining: 2255.57790204931
+Hohmann Transfer to 400 km Burn 1 dv: 174.891149691893
+Hohmann Transfer to 400 km Time to Burn 1: 5.40880912286902
+Hohmann Transfer to 400 km Burn 2 dv: 160.959483910299
+Hohmann Transfer to 400 km Burn 2 dv: 4.98811964242696
+Angle of Burn Start: 0.63986627472174
+Stage Delta V Remaining: 2255.57790204931
+Hohmann Transfer to 400 km Burn 1 dv: 174.893187343323
+Hohmann Transfer to 400 km Time to Burn 1: 5.40887052652105
+Hohmann Transfer to 400 km Burn 2 dv: 160.961218245671
+Hohmann Transfer to 400 km Burn 2 dv: 4.98817212137592
+Angle of Burn Start: 0.639871715873265

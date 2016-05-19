@@ -1,0 +1,5 @@
+Mean Anomaly from Telemety: 337.469934666137
+Mean Anomaly from Orbit: 337.469934666137
+True Anomaly: 334.312715570235
+Mean Anomaly of Mun 306.83827285182
+True Anomaly of Mun: 306.83827285182
