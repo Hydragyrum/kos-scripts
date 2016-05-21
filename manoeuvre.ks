@@ -60,17 +60,27 @@ FUNCTION MNV_HOHMANN_START_ANGLE {
 
 FUNCTION MNV_INCLINATION_DV {
 	PARAMETER dI.
+	LOG dI TO mnv_4.txt.
 	PARAMETER timeToBurn.
 	SET m TO TLM_MEAN_ANOMALY().
 	SET dm TO OBT_MEAN_ANGLE_FROM_TIME(timeToBurn).
 	SET bm TO OBT_LNG_TO_DEGREES(m+dm).
+	LOG bm TO mnv_4.txt.
 	SET ecc TO SHIP:ORBIT:ECCENTRICITY.
+	LOG ecc TO mnv_4.txt.
 	SET w TO SHIP:ORBIT:ARGUMENTOFPERIAPSIS.
+	LOG w TO mnv_4.txt.
 	SET ea TO OBT_MEAN_TO_ECC_ANOMALY(bm, ecc).
+	LOG ea TO mnv_4.txt.
 	SET f TO OBT_ECC_TO_TRUE_ANOMALY(ea, ecc).
+	LOG f TO mnv_4.txt.
 	SET n TO 360 / SHIP:ORBIT:PERIOD.
+	LOG n TO mnv_4.txt.
 	SET a TO SHIP:ORBIT:SEMIMAJORAXIS.
-	RETURN (2 * SIN(dI/2) * SQRT(1 - ecc*ecc) * COS(w + f) * n * a) / (1 + (ecc * COS(f))).
+	LOG a TO mnv_4.txt.
+	SET dV TO (2 * SIN(dI/2) * SQRT(1 - ecc*ecc) * COS(w + f) * n * a) / (1 + (ecc * COS(f))).
+	LOG dV TO mnv_4.txt.
+	RETURN dV.
 }
 
 FUNCTION MNV_CREATE_NODE {
