@@ -70,6 +70,13 @@ FUNCTION MNV_INCLINATION_DV {
 	RETURN (2 * sin(dI/2) * SQRT(1 - ecc*ecc) * COS(w + f) * n * a) / (1 + (ecc * COS(f))).
 }
 
+FUNCTION MNV_CREATE_NODE {
+	PARAMETER burn.	//Radial, Normal, Prograde.
+	PARAMETER timeToNode.
+	SET newNode TO NODE(TIME:SECONDS + timeToNode, burn:X, burn:Y, burn:Z).
+	ADD newNode.
+}
+
 FUNCTION MNV_EXEC_NODE {
     PARAMETER autoWarp.
     LOCAL n IS NEXTNODE.
