@@ -19,7 +19,6 @@ FUNCTION MNV_BURNOUT {
 	}
 	RETURN FALSE.
 }
-
 FUNCTION MNV_TIME{
 	PARAMETER dv.
 	LOCAL engStats IS TLM_STAGE_ENGINE_THRUST().
@@ -37,7 +36,6 @@ FUNCTION MNV_TIME{
 		RETURN g * m * p * (1 - e^(-dv / (g * p))) / f.
 	}
 }
-
 FUNCTION MNV_HOHMANN_DV {
 	PARAMETER desiredAltitude.
 	SET u TO SHIP:ORBIT:BODY:MU.
@@ -47,7 +45,6 @@ FUNCTION MNV_HOHMANN_DV {
 	SET v2 TO SQRT(u / r2) * (1 - SQRT((2 * r1) / (r1 + r2))).
 	RETURN LIST(v1, v2).
 }
-
 FUNCTION MNV_HOHMANN_START_ANGLE {
 	PARAMETER desiredAltitude.
 	SET u TO SHIP:ORBIT:BODY:MU.
@@ -57,7 +54,6 @@ FUNCTION MNV_HOHMANN_START_ANGLE {
 	SET a TO CONSTANT:RAD2DEG * pi * (1 - (1 / (2 * SQRT(2))) * SQRT(((r1 / r2) + 1)^3)).
 	RETURN a.
 }
-
 FUNCTION MNV_INCLINATION_DV {
 	PARAMETER dI.
 	LOG dI TO mnv_4.txt.
@@ -78,18 +74,26 @@ FUNCTION MNV_INCLINATION_DV {
 	LOG n TO mnv_4.txt.
 	SET a TO SHIP:ORBIT:SEMIMAJORAXIS.
 	LOG a TO mnv_4.txt.
-	SET dV TO (2 * SIN(dI/2) * SQRT(1 - ecc*ecc) * COS(w + f) * n * a) / (1 + (ecc * COS(f))).
+	SET dV1 TO 2*SIN(dI/2).
+	LOG dV1 TO mnv_4.txt.
+	SET dV2 TO SQRT(1-(ecc*ecc)).
+	LOG dV2 TO mnv_4.txt.
+	SET dV3 TO COS(OBT_LNG_TO_DEGREES(w+f)).
+	LOG dV3 TO mnv_4.txt.
+	SET dV4 TO n*a.
+	LOG dV4 TO mnv_4.txt.
+	SET dV5 TO 1+(ecc*COS(f)).
+	LOG dV5 TO mnv_4.txt.
+	SET dV TO (dV1*dV2*dV3*dV4)/dV5.
 	LOG dV TO mnv_4.txt.
 	RETURN dV.
 }
-
 FUNCTION MNV_CREATE_NODE {
 	PARAMETER burn.	//Radial, Normal, Prograde.
 	PARAMETER timeToNode.
 	SET newNode TO NODE(TIME:SECONDS + timeToNode, burn:X, burn:Y, burn:Z).
 	ADD newNode.
 }
-
 FUNCTION MNV_EXEC_NODE {
 	PARAMETER autoWarp.
 	LOCAL n IS NEXTNODE.
