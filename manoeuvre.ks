@@ -37,13 +37,17 @@ FUNCTION MNV_TIME{
 	}
 }
 FUNCTION MNV_HOHMANN_DV {
-	PARAMETER desiredAltitude.
-	SET u TO SHIP:ORBIT:BODY:MU.
-	SET r1 TO SHIP:ORBIT:SEMIMAJORAXIS.
-	SET r2 TO desiredAltitude + SHIP:ORBIT:BODY:RADIUS.
-	SET v1 TO SQRT(u / r1) * (SQRT((2 * r2) / (r1 + r2)) - 1).
-	SET v2 TO SQRT(u / r2) * (1 - SQRT((2 * r1) / (r1 + r2))).
-	RETURN LIST(v1, v2).
+	PARAMETER r1. PARAMETER r2. PARAMETER i.
+	SET b TO SHIP:ORBIT:BODY.
+	SET v0 TO OBT_VELOCITY(r1, SHIP:ORBIT:PERIAPSIS, SHIP:ORBIT:APOAPSIS, b).
+	SET v1p TO OBT_VELOCITY(r1, r1, r2, b).
+	SET v1a TO OBT_VELOCITY(r2, r1, r2, b).
+	SET v2 TO OBT_VELOCITY(r2, r2, r2, b).
+	SET dv1 TO v1p-v0.
+	SET dv2 TO SQRT(v2*v2+v1a*v1a-2*v2*v1a*COS(i)).
+	SET dv2t TO v2-v1a.
+	SET dv2i TO dv2-dv2t.
+	RETURN LIST(V(0, 0, dv1), V(0, dV2i, dV2t)).
 }
 FUNCTION MNV_HOHMANN_START_ANGLE {
 	PARAMETER desiredAltitude.
@@ -53,40 +57,6 @@ FUNCTION MNV_HOHMANN_START_ANGLE {
 	SET r2 TO desiredAltitude + SHIP:ORBIT:BODY:RADIUS.
 	SET a TO CONSTANT:RAD2DEG * pi * (1 - (1 / (2 * SQRT(2))) * SQRT(((r1 / r2) + 1)^3)).
 	RETURN a.
-}
-FUNCTION MNV_INCLINATION_DV {
-	PARAMETER dI.
-	LOG dI TO mnv_4.txt.
-	PARAMETER timeToBurn.
-	SET m TO TLM_MEAN_ANOMALY().
-	SET dm TO OBT_MEAN_ANGLE_FROM_TIME(timeToBurn).
-	SET bm TO OBT_LNG_TO_DEGREES(m+dm).
-	LOG bm TO mnv_4.txt.
-	SET ecc TO SHIP:ORBIT:ECCENTRICITY.
-	LOG ecc TO mnv_4.txt.
-	SET w TO SHIP:ORBIT:ARGUMENTOFPERIAPSIS.
-	LOG w TO mnv_4.txt.
-	SET ea TO OBT_MEAN_TO_ECC_ANOMALY(bm, ecc).
-	LOG ea TO mnv_4.txt.
-	SET f TO OBT_ECC_TO_TRUE_ANOMALY(ea, ecc).
-	LOG f TO mnv_4.txt.
-	SET n TO 360 / SHIP:ORBIT:PERIOD.
-	LOG n TO mnv_4.txt.
-	SET a TO SHIP:ORBIT:SEMIMAJORAXIS.
-	LOG a TO mnv_4.txt.
-	SET dV1 TO 2*SIN(dI/2).
-	LOG dV1 TO mnv_4.txt.
-	SET dV2 TO SQRT(1-(ecc*ecc)).
-	LOG dV2 TO mnv_4.txt.
-	SET dV3 TO COS(OBT_LNG_TO_DEGREES(w+f)).
-	LOG dV3 TO mnv_4.txt.
-	SET dV4 TO n*a.
-	LOG dV4 TO mnv_4.txt.
-	SET dV5 TO 1+(ecc*COS(f)).
-	LOG dV5 TO mnv_4.txt.
-	SET dV TO (dV1*dV2*dV3*dV4)/dV5.
-	LOG dV TO mnv_4.txt.
-	RETURN dV.
 }
 FUNCTION MNV_CREATE_NODE {
 	PARAMETER burn.	//Radial, Normal, Prograde.
