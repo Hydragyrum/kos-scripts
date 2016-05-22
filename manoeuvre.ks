@@ -46,7 +46,7 @@ FUNCTION MNV_HOHMANN_DV {
 	SET dv1 TO v1p-v0.
 	SET dv2 TO SQRT(v2*v2+v1a*v1a-2*v2*v1a*COS(i)).
 	SET dv2t TO v2-v1a.
-	SET dv2i TO dv2-dv2t.
+	SET dv2i TO SQRT(dv2*dv2-dv2t*dv2t).
 	RETURN LIST(V(0, 0, dv1), V(0, dV2i, dV2t)).
 }
 FUNCTION MNV_HOHMANN_START_ANGLE {
